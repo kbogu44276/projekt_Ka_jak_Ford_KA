@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>🎲 Wylosowany film</h1>
+<h1> Wylosowany film</h1>
 
 <h2><?= htmlspecialchars($movie->title) ?></h2>
 <p><?= htmlspecialchars($movie->description) ?></p>
@@ -21,3 +21,4 @@
 
 </body>
 </html>
+
