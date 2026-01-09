@@ -6,10 +6,10 @@
 </head>
 <body>
 
-<h1>🎬 Lista filmów</h1>
+<h1> Lista filmów</h1>
 
 <a href="index.php?controller=movie&action=random">
-    🎲 Wylosuj film
+     Wylosuj film
 </a>
 
 <ul>
@@ -23,3 +23,4 @@
 
 </body>
 </html>
+
