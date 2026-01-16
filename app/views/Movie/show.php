@@ -157,7 +157,7 @@
             <h1 class="movie-title"><?= htmlspecialchars($movie->title) ?></h1>
 
             <p class="description">
-                <?= htmlspecialchars($movie->desc) ?>
+                <?= htmlspecialchars($movie->description ?? '') ?>
             </p>
 
             <div class="streaming-section">

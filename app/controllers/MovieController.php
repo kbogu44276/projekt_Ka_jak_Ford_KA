@@ -5,12 +5,12 @@ class MovieController
     private function getMoviesData()
     {
         return [
-            (object)['id' => 1, 'title' => 'Incepcja', 'rating' => 8.8, 'image' => 'https://bit.ly/3XkE7yA', 'desc' => 'Złodziej kradnie tajemnice korporacyjne poprzez technologię dzielenia się snami.'],
-            (object)['id' => 2, 'title' => 'Interstellar', 'rating' => 8.6, 'image' => 'https://bit.ly/4cmW3yB', 'desc' => 'Zespół badaczy podróżuje poza naszą galaktykę, by ratować ludzkość.'],
-            (object)['id' => 3, 'title' => 'Mroczny Rycerz', 'rating' => 9.0, 'image' => 'https://bit.ly/3VvUoN3', 'desc' => 'Batman walczy z Jokerem, który chce pogrążyć Gotham w chaosie.'],
-            (object)['id' => 4, 'title' => 'Pulp Fiction', 'rating' => 8.9, 'image' => 'https://bit.ly/3Xf9U7r', 'desc' => 'Przemoc i odkupienie w świecie przestępczym Los Angeles.'],
-            (object)['id' => 5, 'title' => 'Diuna: Część Druga', 'rating' => 8.1, 'image' => 'https://bit.ly/4aOshmE', 'desc' => 'Paul Atryda jednoczy się z Fremenami, by zemścić się na spiskowcach.'],
-            (object)['id' => 6, 'title' => 'Matrix', 'rating' => 8.7, 'image' => 'https://bit.ly/3x8mH8D', 'desc' => 'Haker komputerowy dowiaduje się o prawdziwej naturze swojej rzeczywistości.']
+            (object)['id' => 1, 'title' => 'Incepcja', 'rating' => 8.8, 'image' => 'https://bit.ly/3XkE7yA', 'description' => 'Złodziej kradnie tajemnice korporacyjne poprzez technologię dzielenia się snami.'],
+            (object)['id' => 2, 'title' => 'Interstellar', 'rating' => 8.6, 'image' => 'https://bit.ly/4cmW3yB', 'description' => 'Zespół badaczy podróżuje poza naszą galaktykę, by ratować ludzkość.'],
+            (object)['id' => 3, 'title' => 'Mroczny Rycerz', 'rating' => 9.0, 'image' => 'https://bit.ly/3VvUoN3', 'description' => 'Batman walczy z Jokerem, który chce pogrążyć Gotham w chaosie.'],
+            (object)['id' => 4, 'title' => 'Pulp Fiction', 'rating' => 8.9, 'image' => 'https://bit.ly/3Xf9U7r', 'description' => 'Przemoc i odkupienie w świecie przestępczym Los Angeles.'],
+            (object)['id' => 5, 'title' => 'Diuna: Część Druga', 'rating' => 8.1, 'image' => 'https://bit.ly/4aOshmE', 'description' => 'Paul Atryda jednoczy się z Fremenami, by zemścić się na spiskowcach.'],
+            (object)['id' => 6, 'title' => 'Matrix', 'rating' => 8.7, 'image' => 'https://bit.ly/3x8mH8D', 'description' => 'Haker komputerowy dowiaduje się o prawdziwej naturze swojej rzeczywistości.']
         ];
     }
 
