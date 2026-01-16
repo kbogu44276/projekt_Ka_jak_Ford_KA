@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
 <style>
     /* Style dla karty filmu - komponent wielokrotnego użytku */
     .movie-card {
@@ -55,13 +58,20 @@
 </style>
 
 <div class="movie-card" onclick="window.location.href='index.php?controller=movie&action=show&id=<?= $movie->id ?>'"
-     style="cursor: pointer; background: #222; border-radius: 8px; overflow: hidden; position: relative;">
-    <div style="position: absolute; top: 10px; right: 10px; background: gold; color: black; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">
-        ★ <?= $movie->rating ?>
+     style="cursor:pointer; background:#222; border-radius:10px; overflow:hidden; transition:0.3s; position:relative;">
+
+    <div class="favorite-badge" style="position:absolute; top:10px; left:10px; color: rgba(255,255,255,0.7); font-size: 20px; transition: 0.3s; z-index: 10;">
+        <i class="fa-regular fa-heart"></i>
     </div>
-    <img src="<?= $movie->image ?>" alt="Poster" style="width: 100%; height: 280px; object-fit: cover;">
-    <div style="padding: 10px;">
-        <h3 style="margin: 0; font-size: 15px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+
+    <div style="position:absolute; top:10px; right:10px; background:gold; color:black; padding:2px 8px; border-radius:4px; font-weight:bold; z-index: 10;">
+        ★ <?= $movie->rating ?? '0.0' ?>
+    </div>
+
+    <img src="<?= $movie->image ?>" style="width:100%; height:300px; object-fit:cover;">
+
+    <div style="padding:15px;">
+        <h3 style="margin:0; font-size:16px; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
             <?= htmlspecialchars($movie->title) ?>
         </h3>
     </div>
