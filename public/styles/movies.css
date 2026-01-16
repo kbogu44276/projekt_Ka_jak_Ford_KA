@@ -1,0 +1,531 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.imdb-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ========================================
+   HEADER & NAVIGATION
+   ======================================== */
+
+.imdb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 3px solid #ffd700;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.imdb-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.header-subtitle {
+    font-size: 1.1rem;
+    color: #a0a0a0;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* Admin buttons - subtle */
+.btn-add,
+.btn-switch {
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700;
+    border: 1px solid #ffd700;
+    font-size: 0.85rem;
+}
+
+.btn-add:hover,
+.btn-switch:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Primary action button */
+.btn-primary {
+    background: #ffd700;
+    color: #000;
+    font-weight: 700;
+    flex: 1;
+    min-width: 140px;
+}
+
+.btn-primary:hover {
+    background: #ffed4e;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+/* Secondary admin buttons - hidden by default */
+.btn-secondary {
+    background: rgba(86, 86, 86, 0.6);
+    color: #fff;
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+}
+
+.btn-secondary:hover {
+    background: rgba(112, 112, 112, 0.8);
+}
+
+/* Danger button */
+.btn-danger {
+    background: rgba(231, 76, 60, 0.6);
+    color: #fff;
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+}
+
+.btn-danger:hover {
+    background: rgba(192, 57, 43, 0.8);
+}
+
+/* Logout button */
+.btn-logout {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(86, 86, 86, 0.7);
+    color: #fff;
+    z-index: 100;
+    border: 1px solid #666;
+    font-size: 0.85rem;
+}
+
+.btn-logout:hover {
+    background: rgba(112, 112, 112, 0.9);
+}
+
+/* ========================================
+   FILTER SECTION
+   ======================================== */
+
+.filter-section {
+    margin-bottom: 3rem;
+    background: rgba(255, 215, 0, 0.08);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.filter-form {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    color: #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-group select {
+    padding: 0.85rem;
+    background: rgba(42, 42, 42, 0.8);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.filter-group select:hover {
+    border-color: #ffd700;
+    background: rgba(42, 42, 42, 0.95);
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+}
+
+.btn-search {
+    background: #ffd700;
+    color: #000;
+    align-self: flex-end;
+    font-weight: 700;
+}
+
+.btn-search:hover {
+    background: #ffed4e;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+/* ========================================
+   MOVIES GRID & CARDS
+   ======================================== */
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.movie-item {
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    backdrop-filter: blur(10px);
+}
+
+.movie-item:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+    border-color: #ffd700;
+    background: rgba(26, 26, 46, 0.95);
+}
+
+/* ========================================
+   MOVIE POSTER
+   ======================================== */
+
+.movie-poster {
+    width: 100%;
+    padding-top: 150%;
+    position: relative;
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+    overflow: hidden;
+}
+
+.poster-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a4a 100%);
+    color: #ffd700;
+}
+
+/* ========================================
+   MOVIE INFO
+   ======================================== */
+
+.movie-info {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.movie-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    color: #ffd700;
+    line-height: 1.4;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.movie-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+}
+
+.meta-badge {
+    display: inline-block;
+    padding: 0.45rem 0.95rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-badge {
+    background: rgba(31, 71, 136, 0.8);
+    color: #64b5f6;
+    border: 1px solid rgba(100, 181, 246, 0.3);
+}
+
+.platform-badge {
+    background: rgba(102, 61, 0, 0.8);
+    color: #ffb74d;
+    border: 1px solid rgba(255, 183, 77, 0.3);
+}
+
+.movie-desc {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ========================================
+   MOVIE ACTIONS
+   ======================================== */
+
+.movie-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.movie-actions .btn-primary {
+    flex: 1;
+    min-width: auto;
+}
+
+.movie-actions form {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.movie-actions form .btn-danger {
+    flex: 1;
+}
+
+/* Hide admin actions by default in user view */
+.movie-actions .btn-secondary,
+.movie-actions .btn-danger {
+    display: none;
+}
+
+/* Show admin actions when in admin view */
+.admin-view .movie-actions .btn-secondary,
+.admin-view .movie-actions .btn-danger {
+    display: inline-block;
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 6rem 2rem;
+    color: #a0a0a0;
+}
+
+.empty-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+}
+
+.empty-message {
+    font-size: 1.6rem;
+    color: #b0b0b0;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .imdb-title {
+        font-size: 2.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .imdb-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .imdb-title {
+        font-size: 2rem;
+    }
+
+    .header-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .imdb-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .filter-form {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .btn-search {
+        width: 100%;
+    }
+
+    .movies-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .movie-item {
+        flex-direction: row;
+    }
+
+    .movie-poster {
+        width: 140px;
+        min-width: 140px;
+        padding-top: 210%;
+    }
+
+    .movie-info {
+        padding: 1.25rem;
+    }
+
+    .movie-name {
+        font-size: 1.1rem;
+    }
+
+    .movie-desc {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .movie-actions {
+        flex-direction: column;
+    }
+
+    .movie-actions .btn-primary {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .imdb-container {
+        padding: 1rem;
+    }
+
+    .imdb-title {
+        font-size: 1.75rem;
+    }
+
+    .header-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .filter-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .movie-poster {
+        width: 100px;
+        min-width: 100px;
+        padding-top: 150%;
+    }
+
+    .poster-placeholder {
+        font-size: 2.5rem;
+    }
+
+    .movie-info {
+        padding: 1rem;
+    }
+
+    .movie-name {
+        font-size: 1rem;
+    }
+
+    .movie-desc {
+        font-size: 0.85rem;
+        -webkit-line-clamp: 1;
+        margin-bottom: 1rem;
+    }
+
+    .meta-badge {
+        padding: 0.35rem 0.7rem;
+        font-size: 0.75rem;
+    }
+
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+}
