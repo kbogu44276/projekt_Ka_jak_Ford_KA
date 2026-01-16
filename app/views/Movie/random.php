@@ -8,7 +8,7 @@
 
 <h1> Wylosowany film</h1>
 <h2><?= htmlspecialchars($movie->title) ?></h2>
-<p><?= htmlspecialchars($movie->description) ?></p>
+<p><?= htmlspecialchars($movie->description ?? '') ?></p>
 
 <a href="index.php?controller=movie&action=random">Losuj ponownie</a>
 <br><br>
