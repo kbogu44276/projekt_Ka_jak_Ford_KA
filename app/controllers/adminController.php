@@ -11,7 +11,11 @@ class AdminController
     public function add(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $db = Database::connect();
+            //$db = Database::connect();
+            //zmiana bo w Database
+            $database = new Database();
+            $db = $database->getConnection();
+
 
             $stmt = $db->prepare(
                 "INSERT INTO movies (title, description) VALUES (:title, :description)"
@@ -28,7 +32,10 @@ class AdminController
     public function delete(): void
     {
         if (isset($_GET['id'])) {
-            $db = Database::connect();
+            //$db = Database::connect();
+            $database = new Database();
+            $db = $database->getConnection();
+
 
             $stmt = $db->prepare(
                 "DELETE FROM movies WHERE id = :id"

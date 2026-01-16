@@ -49,4 +49,19 @@ class MovieController
             'similarMovies' => array_slice($similar, 0, 4)
         ]);
     }
+
+    public function random(): void
+    {
+        // próbujemy losować z bazy - filmy dodane w panelu admina
+        $movie = Movie::getRandom();
+
+        // jesli baza jest pusta lub brak polaczenia, to fallback na dane z tablicy
+        if (!$movie) {
+            $allMovies = $this->getMoviesData();
+            $movie = $allMovies[array_rand($allMovies)];
+        }
+
+        View::render('Movie/random', ['movie' => $movie]);
+    }
+
 }

@@ -1,5 +1,5 @@
 <?php
-
+//To jest drugie View? Trzeba usunąć?
 class View
 {
     public static function render(string $view, array $data = []): void
