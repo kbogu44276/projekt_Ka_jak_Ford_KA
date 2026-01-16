@@ -54,10 +54,15 @@
     }
 </style>
 
-<div class="movie-card">
-    <div class="rating-badge">★ <?= $movie->rating ?></div>
-    <img src="<?= $movie->image ?>" alt="<?= htmlspecialchars($movie->title) ?>" loading="lazy">
-    <div class="movie-info">
-        <h3 class="movie-title"><?= htmlspecialchars($movie->title) ?></h3>
+<div class="movie-card" onclick="window.location.href='index.php?controller=movie&action=show&id=<?= $movie->id ?>'"
+     style="cursor: pointer; background: #222; border-radius: 8px; overflow: hidden; position: relative;">
+    <div style="position: absolute; top: 10px; right: 10px; background: gold; color: black; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">
+        ★ <?= $movie->rating ?>
+    </div>
+    <img src="<?= $movie->image ?>" alt="Poster" style="width: 100%; height: 280px; object-fit: cover;">
+    <div style="padding: 10px;">
+        <h3 style="margin: 0; font-size: 15px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <?= htmlspecialchars($movie->title) ?>
+        </h3>
     </div>
 </div>
