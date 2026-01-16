@@ -2,14 +2,13 @@
 
 class Movie extends BaseModel
 {
+    // Nazwa Twojej tabeli w bazie danych Aiven
     protected static string $table = 'movies';
 
-    public int $id;
-    public string $title;
-    public string $description;
-
-    public static function getRandom(): ?Movie
-    {
-        return self::findRandom();
-    }
+    // Te zmienne muszą odpowiadać kolumnom w Twojej bazie danych
+    public $id;
+    public $title;
+    public $description;
+    public $rating;
+    public $image;
 }
