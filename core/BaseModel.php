@@ -6,7 +6,7 @@ abstract class BaseModel
 
     public static function findAll(): array
     {
-        // ZMIANA: Tworzymy instancję klasy Database, bo getConnection() nie jest statyczne
+
         $database = new Database();
         $db = $database->getConnection();
 
@@ -16,10 +16,10 @@ abstract class BaseModel
         return array_map([static::class, 'map'], $rows);
     }
 
-    // ZMIANA NAZWY: findRandom -> getRandom (żeby pasowało do Twojego Kontrolera)
+
     public static function getRandom(): ?static
     {
-        // ZMIANA: Tutaj też tworzymy instancję Database
+
         $database = new Database();
         $db = $database->getConnection();
 

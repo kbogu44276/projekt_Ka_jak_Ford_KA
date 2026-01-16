@@ -2,10 +2,10 @@
 
 class Movie extends BaseModel
 {
-    // Nazwa Twojej tabeli w bazie danych Aiven
+    // Nazwa  tabeli w bazie danych Aiven
     protected static string $table = 'movies';
 
-    // Te zmienne muszą odpowiadać kolumnom w Twojej bazie danych
+    // zmienne z bazy
     public $id;
     public $title;
     public $description;

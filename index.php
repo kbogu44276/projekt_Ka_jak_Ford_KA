@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 define('BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR);
 
 // POPRAWIONE ŚCIEŻKI na podstawie Twojej struktury plików
-require_once BASE_DIR . 'core' . DIRECTORY_SEPARATOR . 'Db' . DIRECTORY_SEPARATOR . 'Database.php';
+//require_once BASE_DIR . 'core' . DIRECTORY_SEPARATOR . 'Db' . DIRECTORY_SEPARATOR . 'Database.php';
 require_once BASE_DIR . 'core' . DIRECTORY_SEPARATOR . 'BaseModel.php';
 require_once BASE_DIR . 'core' . DIRECTORY_SEPARATOR . 'View.php';
 
