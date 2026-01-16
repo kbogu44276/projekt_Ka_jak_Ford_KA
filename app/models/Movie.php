@@ -11,4 +11,8 @@ class Movie extends BaseModel
     public $description;
     public $rating;
     public $image;
+
+    //Kinga dodaje
+    public $platform;
+    public $category;
 }
