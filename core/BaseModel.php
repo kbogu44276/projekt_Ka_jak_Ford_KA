@@ -6,16 +6,23 @@ abstract class BaseModel
 
     public static function findAll(): array
     {
-        $db = Database::connect();
+        // ZMIANA: Tworzymy instancję klasy Database, bo getConnection() nie jest statyczne
+        $database = new Database();
+        $db = $database->getConnection();
+
         $stmt = $db->query("SELECT * FROM " . static::$table);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return array_map([static::class, 'map'], $rows);
     }
 
-    public static function findRandom(): ?static
+    // ZMIANA NAZWY: findRandom -> getRandom (żeby pasowało do Twojego Kontrolera)
+    public static function getRandom(): ?static
     {
-        $db = Database::connect();
+        // ZMIANA: Tutaj też tworzymy instancję Database
+        $database = new Database();
+        $db = $database->getConnection();
+
         $stmt = $db->query(
             "SELECT * FROM " . static::$table . " ORDER BY RAND() LIMIT 1"
         );
