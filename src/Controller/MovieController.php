@@ -105,4 +105,72 @@ class MovieController
         ]);
     }
 
+    private function getFavorites(): array
+    {
+        $raw = $_COOKIE['favorites'] ?? '[]';
+        $arr = json_decode($raw, true);
+        if (!is_array($arr)) return [];
+        $arr = array_map('intval', $arr);
+        $arr = array_values(array_unique(array_filter($arr, fn($x) => $x > 0)));
+        return $arr;
+    }
+
+    private function saveFavorites(array $ids): void
+    {
+        setcookie('favorites', json_encode(array_values($ids)), [
+            'expires' => time() + 365*24*60*60,
+            'path' => '/',
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    private function isFavorite(int $movieId): bool
+    {
+        return in_array($movieId, $this->getFavorites(), true);
+    }
+
+    public function toggleFavoriteAction(int $movieId, Router $router): ?string
+    {
+        $ids = $this->getFavorites();
+
+        $pos = array_search($movieId, $ids, true);
+        if ($pos === false) $ids[] = $movieId;
+        else unset($ids[$pos]);
+
+        $this->saveFavorites($ids);
+
+        $return = $_REQUEST['return'] ?? $router->generatePath('movie-show', ['id' => $movieId]);
+        $router->redirect($return);
+        return null;
+    }
+
+    public function rateAction(int $movieId, int $rating, Router $router): ?string
+    {
+        if ($rating < 1 || $rating > 5) {
+            $router->redirect($router->generatePath('movie-show', ['id' => $movieId]));
+            return null;
+        }
+
+        $cookieName = "rated_movie_" . $movieId;
+        $oldRating = isset($_COOKIE[$cookieName]) ? (int)$_COOKIE[$cookieName] : null;
+        if ($oldRating !== null && ($oldRating < 1 || $oldRating > 5)) {
+            $oldRating = null;
+        }
+
+        // zapis do DB (globalnie)
+        Movie::applyRating($movieId, $rating, $oldRating);
+
+        // zapis do cookies
+        setcookie($cookieName, (string)$rating, [
+            'expires' => time() + 365*24*60*60,
+            'path' => '/',
+            'samesite' => 'Lax',
+        ]);
+
+        $return = $_REQUEST['return'] ?? $router->generatePath('movie-show', ['id' => $movieId]);
+        $router->redirect($return);
+        return null;
+    }
+
+
 }

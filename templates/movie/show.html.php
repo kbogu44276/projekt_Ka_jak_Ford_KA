@@ -1,8 +1,30 @@
 <?php if(!empty($_SESSION['is_admin'])): ?>
-    <a href="/logout.php" class="btn btn-logout">🚪 Wyloguj</a>
+    <a href="/logout.php" class="btn btn-logout">Wyloguj</a>
 <?php endif; ?>
 
 <?php /** @var \App\Model\Movie $movie */ ?>
+
+<?php
+$movieId = (int)$movie->getId();
+
+// globalna ocena filmu
+$avg = $movie->getAverageRating();     // null albo float
+$count = $movie->getRatingCount();     // int
+
+// moja ocena z cookie
+$myCookieName = 'rated_movie_' . $movieId;
+$myRating = isset($_COOKIE[$myCookieName]) ? (int)$_COOKIE[$myCookieName] : 0;
+if ($myRating < 0 || $myRating > 5) $myRating = 0;
+
+// ulubione z cookie
+$favRaw = $_COOKIE['favorites'] ?? '[]';
+$favArr = json_decode($favRaw, true);
+if (!is_array($favArr)) $favArr = [];
+$favArr = array_map('intval', $favArr);
+
+$isFav = in_array($movieId, $favArr, true);
+$favIcon = $isFav ? '♥' : '♡';
+?>
 
 <main class="imdb-container">
     <div class="imdb-header">
@@ -11,9 +33,9 @@
             <p class="header-subtitle">Szczegóły wybranego filmu</p>
         </div>
         <div class="header-controls">
-            <a href="/index.php?action=movie-index" class="btn btn-switch">⬅️ Powrót do listy</a>
+            <a href="/index.php?action=movie-index" class="btn btn-switch">Powrót do listy</a>
             <?php if(!empty($_SESSION['is_admin'])): ?>
-                <a href="/index.php?action=movie-edit&id=<?= $movie->getId() ?>" class="btn btn-secondary">🛠️ Edytuj</a>
+                <a href="/index.php?action=movie-edit&id=<?= $movieId ?>" class="btn btn-secondary">Edytuj</a>
             <?php endif; ?>
         </div>
     </div>
@@ -27,7 +49,9 @@
         </div>
 
         <div class="movie-details" style="flex: 1;">
-            <div class="movie-meta" style="margin-bottom: 2rem;">
+
+            <!-- META -->
+            <div class="movie-meta" style="margin-bottom: 1.5rem;">
                 <?php if ($movie->getCategory()): ?>
                     <span class="meta-badge category-badge" style="font-size: 1rem; padding: 0.5rem 1rem;">
                         <?= htmlspecialchars($movie->getCategory()) ?>
@@ -40,6 +64,58 @@
                 <?php endif; ?>
             </div>
 
+            <!-- OCENA (globalna) + OCENIANIE + ULUBIONE -->
+            <div class="rating-fav-bar">
+
+                <div class="rating-left">
+                    <div class="rating-header">
+                        <div class="rating-title">Oceń film</div>
+
+                        <div class="rating-global">
+                            <?php if ($avg === null): ?>
+                                <span class="rating-global-empty">Brak ocen</span>
+                            <?php else: ?>
+                                <span class="rating-global-score"><?= number_format($avg, 1) ?>/5</span>
+                                <span class="rating-global-count">(<?= (int)$count ?> głosów)</span>
+                            <?php endif; ?>
+
+                            <?php if ($myRating > 0): ?>
+                                <span class="rating-my">• Twoja: <?= (int)$myRating ?>/5</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- GWIAZDKI 1–5 (hover od lewej) -->
+                    <form class="star-rating"
+                          method="post"
+                          action="/index.php?action=movie-rate&id=<?= $movieId ?>">
+                        <input type="hidden" name="return" value="/index.php?action=movie-show&id=<?= $movieId ?>">
+
+                        <?php for ($i = 5; $i >= 1; $i--): ?>
+                            <input type="radio"
+                                   id="star<?= $i ?>-m<?= $movieId ?>"
+                                   name="rating"
+                                   value="<?= $i ?>"
+                                    <?= ($myRating === $i ? 'checked' : '') ?>>
+
+                            <label for="star<?= $i ?>-m<?= $movieId ?>" title="<?= $i ?> / 5">★</label>
+                        <?php endfor; ?>
+                    </form>
+                </div>
+
+                <!-- ULUBIONE -->
+                <form method="post"
+                      action="/index.php?action=movie-favorite-toggle&id=<?= $movieId ?>"
+                      class="fav-form">
+                    <input type="hidden" name="return" value="/index.php?action=movie-show&id=<?= $movieId ?>">
+                    <button type="submit" class="fav-btn"
+                            title="<?= $isFav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' ?>">
+                        <?= $favIcon ?>
+                    </button>
+                </form>
+            </div>
+
+            <!-- OPIS -->
             <h2 style="color: #ffd700; margin-bottom: 1.5rem; font-size: 2rem; border-bottom: 1px solid #333; padding-bottom: 0.5rem;">
                 Opis fabuły
             </h2>
@@ -51,7 +127,7 @@
 </main>
 
 <style>
-    /* Dodatkowe style dla responsywności pojedynczego widoku */
+    /* Responsywność pojedynczego widoku */
     @media (max-width: 768px) {
         .movie-single-layout {
             flex-direction: column;
@@ -62,14 +138,14 @@
             flex: 0 0 200px;
             width: 200px;
         }
+        .rating-fav-bar{
+            text-align:left;
+        }
     }
 </style>
+
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
         background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
@@ -84,7 +160,6 @@
         padding: 2rem 1rem;
     }
 
-    /* Header */
     .imdb-header {
         display: flex;
         justify-content: space-between;
@@ -94,9 +169,7 @@
         border-bottom: 2px solid #ffd700;
     }
 
-    .header-content {
-        flex: 1;
-    }
+    .header-content { flex: 1; }
 
     .imdb-title {
         font-size: 3rem;
@@ -119,7 +192,6 @@
         justify-content: flex-end;
     }
 
-    /* Buttons */
     .btn {
         padding: 0.75rem 1.5rem;
         border: none;
@@ -133,54 +205,11 @@
         text-align: center;
     }
 
-    .btn-add {
-        background: #ffd700;
-        color: #000;
-    }
+    .btn-switch { background: #444; color: #fff; }
+    .btn-switch:hover { background: #555; }
 
-    .btn-add:hover {
-        background: #ffed4e;
-        transform: translateY(-2px);
-    }
-
-    .btn-switch {
-        background: #444;
-        color: #fff;
-    }
-
-    .btn-switch:hover {
-        background: #555;
-    }
-
-    .btn-primary {
-        background: #ffd700;
-        color: #000;
-        flex: 1;
-        min-width: 120px;
-    }
-
-    .btn-primary:hover {
-        background: #ffed4e;
-    }
-
-    .btn-secondary {
-        background: #565656;
-        color: #fff;
-    }
-
-    .btn-secondary:hover {
-        background: #707070;
-    }
-
-    .btn-danger {
-        background: #e74c3c;
-        color: #fff;
-        padding: 0.75rem 1.25rem;
-    }
-
-    .btn-danger:hover {
-        background: #c0392b;
-    }
+    .btn-secondary { background: #565656; color: #fff; }
+    .btn-secondary:hover { background: #707070; }
 
     .btn-logout {
         position: fixed;
@@ -190,93 +219,10 @@
         color: #fff;
         z-index: 100;
     }
-
-    .btn-logout:hover {
-        background: #707070;
-    }
-
-    /* Filter Section */
-    .filter-section {
-        margin-bottom: 3rem;
-        background: rgba(255, 215, 0, 0.05);
-        padding: 2rem;
-        border-radius: 8px;
-        border: 1px solid #ffd700;
-    }
-
-    .filter-form {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        align-items: flex-end;
-    }
-
-    .filter-group {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        min-width: 200px;
-    }
-
-    .filter-group label {
-        font-weight: 600;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-        color: #ffd700;
-    }
-
-    .filter-group select {
-        padding: 0.75rem;
-        background: #2a2a2a;
-        color: #e0e0e0;
-        border: 1px solid #ffd700;
-        border-radius: 4px;
-        font-size: 0.9rem;
-    }
-
-    .filter-group select:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
-    }
-
-    .btn-search {
-        background: #ffd700;
-        color: #000;
-        align-self: flex-end;
-    }
-
-    .btn-search:hover {
-        background: #ffed4e;
-    }
-
-    /* Movies Grid */
-    .movies-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-
-    .movie-item {
-        background: #1a1a2e;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: 1px solid #333;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-
-    .movie-item:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 24px rgba(255, 215, 0, 0.15);
-        border-color: #ffd700;
-    }
+    .btn-logout:hover { background: #707070; }
 
     .movie-poster {
         width: 100%;
-        padding-top: 150%;
         position: relative;
         background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
         overflow: hidden;
@@ -284,37 +230,13 @@
 
     .poster-placeholder {
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 0; left: 0;
         width: 100%;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3rem;
         background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
-    }
-
-    .movie-info {
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-    }
-
-    .movie-name {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-        color: #ffd700;
-        line-height: 1.3;
-    }
-
-    .movie-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
     }
 
     .meta-badge {
@@ -324,97 +246,103 @@
         font-size: 0.8rem;
         font-weight: 600;
     }
+    .category-badge { background: #1f4788; color: #64b5f6; }
+    .platform-badge { background: #663d00; color: #ffb74d; }
 
-    .category-badge {
-        background: #1f4788;
-        color: #64b5f6;
+    /* PANEL */
+    .rating-fav-bar{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:1rem;
+        margin: 1rem 0 1.75rem;
+        padding: 1rem 1.25rem;
+        border: 1px solid #333;
+        border-radius: 12px;
+        background: rgba(0,0,0,0.20);
     }
 
-    .platform-badge {
-        background: #663d00;
-        color: #ffb74d;
-    }
-
-    .movie-desc {
-        color: #b0b0b0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        margin-bottom: 1rem;
+    .rating-left{
         flex: 1;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        min-width: 200px;
     }
 
-    .movie-actions {
-        display: flex;
-        gap: 0.75rem;
+    .rating-title{
+        font-weight:700;
+        color:#e0e0e0;
+        font-size: 1.05rem;
+    }
+
+    .rating-header{
+        display:flex;
+        align-items:flex-end;
+        justify-content:space-between;
+        gap: 1rem;
+        margin-bottom: .4rem;
+    }
+
+    .rating-global{
+        font-size: .95rem;
+        color: #b0b0b0;
+        display:flex;
+        align-items:center;
+        gap: .5rem;
         flex-wrap: wrap;
-        margin-top: auto;
+        justify-content:flex-end;
     }
 
-    .movie-actions form {
-        flex: 1;
+    .rating-global-score{ color:#ffd700; font-weight:800; }
+    .rating-global-empty{ color:#b0b0b0; font-style: italic; }
+    .rating-my{ color:#e0e0e0; }
+
+    /* GWIAZDKI */
+    .star-rating{
+        display:inline-flex;
+        flex-direction: row-reverse; /* hover "w lewo" */
+        font-size: 2.2rem;
+        line-height: 1;
+        gap: .25rem;
+    }
+    .star-rating input{ display:none; }
+
+    .star-rating label{
+        color:#777;
+        cursor:pointer;
+        transition: color .18s ease, transform .18s ease;
+        user-select:none;
     }
 
-    /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
+    .star-rating label:hover,
+    .star-rating label:hover ~ label{
+        color:#ffd700;
+        transform: translateY(-1px);
     }
 
-    .empty-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
+    .star-rating input:checked ~ label{
+        color:#ffd700;
     }
 
-    .empty-message {
-        font-size: 1.5rem;
-        color: #b0b0b0;
-        font-weight: 300;
+    /* ULUBIONE */
+    .fav-form{ margin:0; }
+
+    .fav-btn{
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        border: 1px solid #333;
+        background: rgba(255,255,255,0.04);
+        color: #ffd700;
+        font-size: 1.7rem;
+        cursor: pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        transition: transform .15s ease, background .15s ease, border-color .15s ease;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-        .imdb-title {
-            font-size: 2rem;
-        }
-
-        .imdb-header {
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .header-controls {
-            width: 100%;
-            justify-content: flex-start;
-        }
-
-        .filter-form {
-            flex-direction: column;
-        }
-
-        .filter-group {
-            width: 100%;
-        }
-
-        .btn-search {
-            width: 100%;
-        }
-
-        .movies-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .movie-item {
-            flex-direction: row;
-        }
-
-        .movie-poster {
-            width: 150px;
-            min-width: 150px;
-            padding-top: 225%;
-        }
+    .fav-btn:hover{
+        transform: scale(1.05);
+        background: rgba(255,215,0,0.10);
+        border-color: #ffd700;
     }
 </style>

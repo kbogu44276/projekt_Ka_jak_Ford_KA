@@ -1,6 +1,8 @@
 <?php
-//proba
 session_start();
+
+
+
 
 if (!isset($_SESSION['is_admin'])) {
     $_SESSION['is_admin'] = false;
@@ -77,8 +79,22 @@ switch ($action) {
         $view = $controller->randomAction($templating, $router);
         break;
 
+    case 'movie-rate':
+        if (!$_REQUEST['id'] || !isset($_REQUEST['rating'])) { break; }
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->rateAction((int)$_REQUEST['id'], (int)$_REQUEST['rating'], $router);
+        break;
+
+    case 'movie-favorite-toggle':
+        if (!$_REQUEST['id']) { break; }
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->toggleFavoriteAction((int)$_REQUEST['id'], $router);
+        break;
+
+
 }
 
 if ($view) {
     echo $view;
 }
+

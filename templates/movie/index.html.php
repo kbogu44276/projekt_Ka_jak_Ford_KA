@@ -1,6 +1,14 @@
 <?php if(!empty($_SESSION['is_admin'])): ?>
-    <a href="/logout.php" class="btn btn-logout">🚪 Wyloguj</a>
+    <a href="/logout.php" class="btn btn-logout">Wyloguj</a>
 <?php endif; ?>
+
+<?php
+$favRaw = $_COOKIE['favorites'] ?? '[]';
+$favArr = json_decode($favRaw, true);
+if (!is_array($favArr)) $favArr = [];
+$favArr = array_map('intval', $favArr);
+?>
+
 
 <main class="imdb-container">
     <div class="imdb-header">
@@ -10,14 +18,14 @@
         </div>
         <div class="header-controls">
             <?php if($viewType === 'admin'): ?>
-                <a href="/index.php?action=movie-create" class="btn btn-add">➕ Add Movie</a>
-                <a href="/index.php?action=movie-index&view=user" class="btn btn-switch">👤 User View</a>
+                <a href="/index.php?action=movie-create" class="btn btn-add"> Add Movie</a>
+                <a href="/index.php?action=movie-index&view=user" class="btn btn-switch">User View</a>
             <?php else: ?>
-                <a href="/index.php?action=movie-index&view=admin" class="btn btn-switch">🛠️ Admin View</a>
+                <a href="/index.php?action=movie-index&view=admin" class="btn btn-switch">Admin View</a>
             <?php endif; ?>
 
             <?php if($viewType === 'user'): ?>
-                <a href="index.php?action=movie-random&view=user" class="btn btn-random">🎲 Random Movie</a>
+                <a href="index.php?action=movie-random&view=user" class="btn btn-random">Random Movie</a>
             <?php endif; ?>
         </div>
     </div>
@@ -75,7 +83,14 @@
                     </div>
 
                     <div class="movie-info">
-                        <h3 class="movie-name"><?= htmlspecialchars($movie->getTitle()) ?></h3>
+                        <?php $isFav = in_array((int)$movie->getId(), $favArr, true); ?>
+                        <h3 class="movie-name">
+                            <?= htmlspecialchars($movie->getTitle()) ?>
+                            <span title="<?= $isFav ? 'Ulubione' : 'Nieulubione' ?>" style="margin-left:.4rem; color:#ffd700;">
+                                <?= $isFav ? '♥' : '♡' ?>
+                            </span>
+                        </h3>
+
 
                         <div class="movie-meta">
                             <?php if ($movie->getCategory()): ?>

@@ -11,6 +11,9 @@ class Movie
     private ?string $platform = null;
     private ?string $category = null;
 
+    private int $rating_sum = 0;
+    private int $rating_count = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +74,18 @@ class Movie
         return $this;
     }
 
+    public function getRatingSum(): int { return $this->rating_sum; }
+    public function setRatingSum(int $v): Movie { $this->rating_sum = $v; return $this; }
+
+    public function getRatingCount(): int { return $this->rating_count; }
+
+    public function setRatingCount(int $v): Movie { $this->rating_count = $v; return $this; }
+
+    public function getAverageRating(): ?float
+    {
+        if($this->rating_sum <= 0) return null;
+        return $this->rating_sum / $this->rating_count;
+    }
     public static function fromArray($array): Movie
     {
         $movie = new self();
@@ -95,6 +110,12 @@ class Movie
         }
         if (isset($array['category'])) {
             $this->setCategory($array['category']);
+        }
+        if (isset($array['rating_sum'])) {
+            $this->setRatingSum((int)$array['rating_sum']);
+        }
+        if (isset($array['rating_count'])) {
+            $this->setRatingCount((int)$array['rating_count']);
         }
 
         return $this;
@@ -229,6 +250,37 @@ class Movie
                 ':id' => $this->getId(),
             ]);
         }
+    }
+
+    public static function applyRating(int $movieId, int $newRating, ?int $oldRating = null): void
+    {
+        $pdo = self::getConnection();
+        $pdo->beginTransaction();
+
+        // blokujemy wiersz (MySQL/InnoDB)
+        $stmt = $pdo->prepare("SELECT rating_sum, rating_count FROM movies WHERE id = :id FOR UPDATE");
+        $stmt->execute(['id' => $movieId]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            $pdo->rollBack();
+            throw new \RuntimeException("Movie not found");
+        }
+
+        $sum = (int)$row['rating_sum'];
+        $count = (int)$row['rating_count'];
+
+        if ($oldRating === null) {
+            $sum += $newRating;
+            $count += 1;
+        } else {
+            $sum = $sum - $oldRating + $newRating; // zmiana oceny
+        }
+
+        $upd = $pdo->prepare("UPDATE movies SET rating_sum = :sum, rating_count = :count WHERE id = :id");
+        $upd->execute(['sum' => $sum, 'count' => $count, 'id' => $movieId]);
+
+        $pdo->commit();
     }
 
 
