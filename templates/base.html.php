@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/styles/movies.css">
     <title><?= $title ?? 'Custom Framework' ?></title>
+    <script src="/scripts/js-search.js" defer></script>
+
 </head>
 <body <?= isset($bodyClass) ? "class='$bodyClass'" : '' ?>>
 <nav><?php require(__DIR__ . DIRECTORY_SEPARATOR . 'nav.html.php') ?></nav>
