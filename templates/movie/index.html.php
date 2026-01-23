@@ -428,4 +428,89 @@ $favArr = array_map('intval', $favArr);
             padding-top: 120px;
         }
     }
+
+    /* === SEARCH BAR (IMDb style) === */
+
+    .search-section {
+        margin: 2rem 0 3rem 0;
+    }
+
+    /* form */
+    .search-bar {
+        position: relative;
+        max-width: 100%;
+    }
+
+    /* input */
+    .search-input {
+        width: 100%;
+        padding: 1rem 3.5rem 1rem 1.25rem;
+        font-size: 1rem;
+        border-radius: 6px;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        border: 2px solid #ffd700;
+        outline: none;
+        transition: all 0.25s ease;
+    }
+
+    .search-input::placeholder {
+        color: #b0b0b0;
+    }
+
+    .search-input:focus {
+        box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.25);
+    }
+
+    /* lupa */
+    .search-submit {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #ffd700;
+        border: none;
+        color: #000;
+        width: 38px;
+        height: 38px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .search-submit:hover {
+        background: #ffed4e;
+    }
+
+    /* dropdown */
+    .search-dropdown {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        background: #1a1a2e;
+        border: 1px solid #ffd700;
+        border-radius: 6px;
+        overflow: hidden;
+        z-index: 20;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    /* item */
+    .search-dropdown-item {
+        padding: 0.75rem 1.25rem;
+        cursor: pointer;
+        color: #e0e0e0;
+        border-bottom: 1px solid #333;
+    }
+
+    .search-dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .search-dropdown-item:hover {
+        background: rgba(255, 215, 0, 0.12);
+        color: #ffd700;
+    }
 </style>
