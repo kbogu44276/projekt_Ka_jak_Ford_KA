@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adce309a-feaf-4a4f-9735-a7bb3804adfc" name="Changes" comment="dodanie ulubionych i oceny filmu">
-      <change beforePath="$PROJECT_DIR$/.idea/projekt_Ka_jak_Ford_KA.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/projekt_Ka_jak_Ford_KA.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="adce309a-feaf-4a4f-9735-a7bb3804adfc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -73,33 +70,11 @@
       <option name="presentableId" value="Default" />
       <updated>1768396850948</updated>
       <workItem from="1768396853143" duration="91000" />
-      <workItem from="1769100331306" duration="1021000" />
+      <workItem from="1769088744888" duration="1079000" />
     </task>
-    <task id="LOCAL-00001" summary="proba">
-      <option name="closed" value="true" />
-      <created>1769100449670</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1769100449670</updated>
-    </task>
-    <task id="LOCAL-00002" summary="dodanie ulubionych i oceny filmu">
-      <option name="closed" value="true" />
-      <created>1769101295506</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1769101295506</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="proba" />
-    <MESSAGE value="dodanie ulubionych i oceny filmu" />
-    <option name="LAST_COMMIT_MESSAGE" value="dodanie ulubionych i oceny filmu" />
   </component>
 </project>
