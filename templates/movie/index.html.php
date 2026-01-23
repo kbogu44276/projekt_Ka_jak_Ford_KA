@@ -1,3 +1,5 @@
+<script src="/script/js-search.js" defer></script>
+
 <?php if(!empty($_SESSION['is_admin'])): ?>
     <a href="/logout.php" class="btn btn-logout">Wyloguj</a>
 <?php endif; ?>

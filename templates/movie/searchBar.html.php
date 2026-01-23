@@ -1,6 +1,6 @@
 <?php /** @var string|null $q */ ?>
 
-<form class="search-bar js-search" method="get" action="index.php"
+<form class="search-bar js-search" data-suggest-url="index.php?action=movie-suggest"
       autocomplete="off"
       data-suggest-url="index.php?action=movie-suggest">
 

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/styles/movies.css">
     <title><?= $title ?? 'Custom Framework' ?></title>
-    <script src="/scripts/js-search.js" defer></script>
+    <script src="/script/js-search.js" defer></script>
 
 </head>
 <body <?= isset($bodyClass) ? "class='$bodyClass'" : '' ?>>
