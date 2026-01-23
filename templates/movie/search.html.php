@@ -1,6 +1,14 @@
 <?php /** @var string $q */ ?>
 <?php /** @var array $movies */ ?>
 
+<?php
+// ulubione z cookies
+$favRaw = $_COOKIE['favorites'] ?? '[]';
+$favArr = json_decode($favRaw, true);
+if (!is_array($favArr)) $favArr = [];
+$favArr = array_map('intval', $favArr);
+?>
+
 <main class="imdb-container">
     <div class="imdb-header">
         <div class="header-content">
@@ -11,7 +19,7 @@
         </div>
 
         <div class="header-controls">
-            <a href="/index.php?action=movie-index&view=user" class="btn btn-switch">⬅ Back to Home</a>
+            <a href="/index.php?action=movie-index&view=user" class="btn btn-switch">Back to Home</a>
         </div>
     </div>
 
@@ -24,7 +32,7 @@
 
     <?php if (($q ?? '') === ''): ?>
         <div class="empty-state">
-            <p class="empty-icon">🔎</p>
+            <p class="empty-message">Search movie</p>
             <p class="empty-message">Start typing a movie title.</p>
         </div>
     <?php elseif (empty($movies)): ?>
@@ -54,11 +62,28 @@
 
                         <p class="movie-desc"><?= htmlspecialchars($movie->getDescription() ?? '') ?></p>
 
+                        <?php
+                        $mid = (int)$movie->getId();
+                        $isFav = in_array($mid, $favArr, true);
+                        $favIcon = $isFav ? '♥' : '♡';
+                        ?>
                         <div class="movie-actions">
-                            <a class="btn btn-primary" href="/index.php?action=movie-show&id=<?= (int)$movie->getId() ?>">
+                            <a class="btn btn-primary" href="/index.php?action=movie-show&id=<?= $mid ?>">
                                 View Details
                             </a>
+
+                            <form method="post"
+                                  action="/index.php?action=movie-favorite-toggle&id=<?= $mid ?>"
+                                  class="fav-form">
+                                <input type="hidden" name="return"
+                                       value="/index.php?action=movie-search&q=<?= urlencode($q ?? '') ?>">
+                                <button type="submit" class="fav-btn"
+                                        title="<?= $isFav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych' ?>">
+                                    <?= $favIcon ?>
+                                </button>
+                            </form>
                         </div>
+
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -374,4 +399,27 @@
             padding-top: 120px;
         }
     }
+    .fav-form{ margin:0; }
+
+    .fav-btn{
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        border: 1px solid #333;
+        background: rgba(255,255,255,0.04);
+        color: #ffd700;
+        font-size: 1.6rem;
+        cursor: pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .fav-btn:hover{
+        transform: scale(1.05);
+        background: rgba(255,215,0,0.10);
+        border-color: #ffd700;
+    }
+
 </style>
