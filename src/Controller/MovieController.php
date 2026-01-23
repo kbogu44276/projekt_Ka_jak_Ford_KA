@@ -172,5 +172,36 @@ class MovieController
         return null;
     }
 
+    public function searchAction(Templating $templating, Router $router): ?string
+    {
+        $q = trim($_GET['q'] ?? '');
+
+        $movies = [];
+        if ($q !== '') {
+            $movies = Movie::searchByTitle($q, 80);
+        }
+
+        return $templating->render('movie/search.html.php', [
+            'q' => $q,
+            'movies' => $movies,
+            'router' => $router,
+        ]);
+    }
+
+
+    public function suggestAction(): void
+    {
+        $q = trim($_GET['q'] ?? '');
+
+        header('Content-Type: application/json; charset=utf-8');
+
+        if (mb_strlen($q) < 3) {
+            echo json_encode([]);
+            return;
+        }
+
+        $data = Movie::suggestTitles($q, 8);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
 
 }

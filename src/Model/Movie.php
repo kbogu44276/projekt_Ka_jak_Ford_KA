@@ -298,4 +298,47 @@ class Movie
         $this->setDescription(null);
         $this->setPlatform(null);
     }
+
+    public static function searchByTitle(string $query, int $limit = 50): array
+    {
+        $query = trim($query);
+        if ($query === '') return [];
+
+        $pdo = self::getConnection();
+
+        // ESCAPE dla LIKE (żeby % i _ nie psuły zapytania)
+        $like = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $query);
+        $like = "%{$like}%";
+
+        $stmt = $pdo->prepare("
+        SELECT *
+        FROM movies
+        WHERE title LIKE :q ESCAPE '\\\\'
+        ORDER BY title ASC
+        LIMIT :limit
+    ");
+        $stmt->bindValue(':q', $like, \PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $movies = [];
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $movies[] = self::fromArray($row);
+        }
+
+        return $movies;
+    }
+
+
+    public static function suggestTitles(string $query, int $limit = 8): array
+    {
+        if (mb_strlen(trim($query)) < 3) return [];
+        $movies = self::searchByTitle($query, $limit);
+
+        return array_map(fn($m) => [
+            'id' => $m->id,
+            'title' => $m->title,
+        ], $movies);
+    }
 }

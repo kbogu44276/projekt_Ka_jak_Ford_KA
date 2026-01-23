@@ -90,6 +90,18 @@ switch ($action) {
         $controller = new \App\Controller\MovieController();
         $view = $controller->toggleFavoriteAction((int)$_REQUEST['id'], $router);
         break;
+    case 'movie-search':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->searchAction($templating, $router);
+        break;
+
+    case 'movie-suggest':
+        $controller = new \App\Controller\MovieController();
+        $controller->suggestAction();
+        exit;
+    default:
+        $view = "404";
+        break;
 
 
 }

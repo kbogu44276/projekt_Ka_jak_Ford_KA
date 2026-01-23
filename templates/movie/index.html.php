@@ -30,6 +30,15 @@ $favArr = array_map('intval', $favArr);
         </div>
     </div>
 
+    <?php if ($viewType === 'user'): ?>
+        <div class="search-section">
+            <?php
+            $q = $_GET['q'] ?? '';
+            require __DIR__ . '/searchBar.html.php';
+            ?>
+        </div>
+    <?php endif; ?>
+
     <?php if($viewType === 'user'): ?>
         <div class="filter-section">
             <form method="get" class="filter-form">
