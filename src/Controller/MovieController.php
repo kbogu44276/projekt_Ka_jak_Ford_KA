@@ -167,7 +167,7 @@ class MovieController
             'samesite' => 'Lax',
         ]);
 
-        $return = $_REQUEST['return'] ?? $router->generatePath('movie-show', ['id' => $movieId]);
+        $return = $_POST['return'] ?? $router->generatePath('movie-show', ['id' => $movieId]);
         $router->redirect($return);
         return null;
     }

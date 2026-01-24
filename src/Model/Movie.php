@@ -83,7 +83,7 @@ class Movie
 
     public function getAverageRating(): ?float
     {
-        if($this->rating_sum <= 0) return null;
+        if($this->rating_count <= 0) return null;
         return $this->rating_sum / $this->rating_count;
     }
     public static function fromArray($array): Movie
@@ -255,6 +255,8 @@ class Movie
     public static function applyRating(int $movieId, int $newRating, ?int $oldRating = null): void
     {
         $pdo = self::getConnection();
+
+
         $pdo->beginTransaction();
 
         // blokujemy wiersz (MySQL/InnoDB)

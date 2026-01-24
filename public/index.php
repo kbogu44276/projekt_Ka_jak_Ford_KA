@@ -80,10 +80,19 @@ switch ($action) {
         break;
 
     case 'movie-rate':
-        if (!$_REQUEST['id'] || !isset($_REQUEST['rating'])) { break; }
+        $movieId = (int)($_GET['id'] ?? 0);
+        $rating  = (int)($_POST['rating'] ?? 0);
+
+        if ($movieId <= 0 || $rating < 1 || $rating > 5) {
+            $router->redirect('/index.php?action=movie-show&id=' . $movieId);
+            return;
+        }
+
         $controller = new \App\Controller\MovieController();
-        $view = $controller->rateAction((int)$_REQUEST['id'], (int)$_REQUEST['rating'], $router);
+        $controller->rateAction($movieId, $rating, $router);
+        $view = null;
         break;
+
 
     case 'movie-favorite-toggle':
         if (!$_REQUEST['id']) { break; }

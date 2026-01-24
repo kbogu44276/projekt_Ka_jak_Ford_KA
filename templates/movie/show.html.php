@@ -25,6 +25,13 @@ $favArr = array_map('intval', $favArr);
 $isFav = in_array($movieId, $favArr, true);
 $favIcon = $isFav ? '♥' : '♡';
 ?>
+<script>
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.matches('.star-rating input[name="rating"]')) {
+            e.target.closest('form').submit();
+        }
+    });
+</script>
 
 <main class="imdb-container">
     <div class="imdb-header">
